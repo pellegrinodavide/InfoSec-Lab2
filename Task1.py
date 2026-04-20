@@ -99,5 +99,5 @@ if __name__ == "__main__":
                 bbox=dict(boxstyle='round', facecolor='lightyellow'))
 
     plt.tight_layout()
-    plt.savefig("task1_wiretap_uniform.png", dpi=150, bbox_inches='tight')
+    plt.savefig("Task1Image/task1_wiretap_uniform.png", dpi=150, bbox_inches='tight')
     plt.show()
