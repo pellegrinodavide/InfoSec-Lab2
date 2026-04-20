@@ -233,7 +233,7 @@ def run_task7(N: int = 2**14):
     fig.suptitle("Task 7: System Security Evaluation over the Wiretap BSC", fontsize=14, fontweight="bold")
     plt.savefig("Task7Image/Task7_BSC_security.png", dpi=150, bbox_inches="tight")
     plt.show()
-    print("\nPlot saved to Task7_BSC_security.png")
+    print("\nPlot saved to Task7_BSC_security.png\n")
 
     # --- Summary at Working Point (epsilon=0.10, delta=0.45) ---
     print("SUMMARY — epsilon=0.10, delta=0.45 (secrecy-advantage regime)")
