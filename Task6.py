@@ -8,19 +8,11 @@ import matplotlib.pyplot as plt
 class WiretapBSC:
     """
     A Wiretap Binary Symmetric Channel (BSC) that operates on 7-bit words.
-    It simulates communication from a sender to Bob (the legitimate receiver) and Eve (the eavesdropper).
-    - Bob's channel is a BSC with a crossover probability of epsilon.
-    - Eve's channel is a BSC with a crossover probability of delta.
-    - The two channels are conditionally independent given the transmitted word x.
     """
     # --- Start __init__ ---
     def __init__(self, epsilon: float, delta: float, n: int = 7):
         """
         Initializes the WiretapBSC.
-        Args:
-            epsilon: The crossover probability for Bob's channel.
-            delta: The crossover probability for Eve's channel.
-            n: The word length in bits (default is 7).
         """
         if not (0.0 <= epsilon <= 1.0):
             raise ValueError("epsilon must be in [0, 1]")
@@ -35,12 +27,6 @@ class WiretapBSC:
     def _bsc_str(self, x_str: str, p: float) -> str:
         """
         Simulates passing a single bit-string through a BSC with crossover probability p.
-        Each bit is flipped independently with probability p. This is achieved by
-        generating a Bernoulli(p) flip mask and XORing it with the input.
-        Args:
-            x_str: The input bit-string.
-            p: The crossover probability.
-        Returns: The received word as a bit-string.
         """
         flip = (np.random.rand(self.n) < p).astype(int)
         x_bits = np.array(list(x_str), dtype=int)
@@ -52,9 +38,6 @@ class WiretapBSC:
     def transmit_str(self, x_str: str):
         """
         Transmits a single word (as a bit-string) through both Bob's and Eve's channels.
-        Args:
-            x_str: The word to transmit.
-        Returns: A tuple (y_str, z_str) containing the words received by Bob and Eve.
         """
         y = self._bsc_str(x_str, self.epsilon)
         z = self._bsc_str(x_str, self.delta)
@@ -65,13 +48,6 @@ class WiretapBSC:
     def transmit_batch(self, x: np.ndarray):
         """
         Transmits a batch of words through both channels simultaneously.
-        This method is vectorized for efficiency.
-        Args:
-            x: A NumPy array of shape (N, n) representing N words of n bits each.
-        Returns:
-            A tuple (y, z) where:
-            - y is a NumPy array of shape (N, n) for words received by Bob.
-            - z is a NumPy array of shape (N, n) for words received by Eve.
         """
         flip_y = (np.random.rand(*x.shape) < self.epsilon).astype(int)
         flip_z = (np.random.rand(*x.shape) < self.delta).astype(int)
@@ -83,9 +59,6 @@ class WiretapBSC:
 def verify_channel(n_words: int = 2**16):
     """
     Verifies the channel implementation by comparing theoretical and measured Bit Error Rates (BER).
-    For several (epsilon, delta) pairs, this function transmits a large number
-    of random words and calculates the BER for both Bob's and Eve's channels.
-    Args: n_words: The number of random words to transmit for the verification.
     """
     test_pairs = [
         (0.05, 0.20),
